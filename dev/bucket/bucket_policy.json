@@ -1,0 +1,24 @@
+{
+    "Statement": [
+        {
+            "Action": "s3:*",
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            },
+            "Effect": "Deny",
+            "Principal": "*",
+            "Resource": "arn:aws:s3:::${bucket_name}/*",
+            "Sid": "DenyInsecureTransport"
+        },
+        {
+            "Action": "s3:GetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Resource": "arn:aws:s3:::${bucket_name}/*",
+            "Sid": "AllowPublicRead"
+        }
+    ],
+    "Version": "2012-10-17"
+}

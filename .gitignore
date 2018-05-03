@@ -3,3 +3,10 @@ terraform.tfstate
 terraform.tfstate.backup
 .terraform/
 terraform.tfstate.d/
+
+# User state
+.filecache/
+*.exe
+*.msi
+*.rpm
+*.zip
