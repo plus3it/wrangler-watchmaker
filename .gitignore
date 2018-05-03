@@ -1,0 +1,5 @@
+# Terraform compiled files and directories
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+terraform.tfstate.d/
