@@ -5,6 +5,7 @@ env:
     - REPO="${TRAVIS_REPO_SLUG#*/}"
     - OWNER=plus3it
     - DEPLOY_SLUG=$OWNER/$REPO
+    - TF_INPUT=0
 
 jobs:
   include:
@@ -12,13 +13,7 @@ jobs:
       env:
         - JOB="Terraform Format Verification"
       before_script:
-        - TERRAFORM_VERSION=$(curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
-        - TERRAFORM_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
-        - echo "TERRAFORM_URL=${TERRAFORM_URL}"
-        - curl -sSL -o terraform.zip "$TERRAFORM_URL"
-        - unzip terraform.zip && rm -f terraform.zip && chmod +x terraform
-        - mkdir -p ${HOME}/bin && export PATH=${HOME}/bin:${PATH} && mv terraform ${HOME}/bin/
-        - terraform -v
+        - make tf.tools
       script:
         - make tf.lint
     - stage: test
@@ -29,18 +24,16 @@ jobs:
       script:
         - make json.lint
     - stage: deploy
-      if: branch = master AND type = push AND repo = env(DEPLOY_SLUG)
       env:
         - JOB="Deploy to GitHub Releases"
         - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
         - RELEASE_VERSION=$(grep '^current_version' $TRAVIS_BUILD_DIR/.bumpversion.cfg | sed 's/^.*= //')
         - RELEASE_BODY="* [$REPO v$RELEASE_VERSION changes](https://github.com/$OWNER/$REPO/compare/$PRIOR_VERSION...$RELEASE_VERSION)"
-      before_script:
-        - echo PRIOR_VERSION=$PRIOR_VERSION
-        - echo RELEASE_VERSION=$RELEASE_VERSION
-        - echo RELEASE_BODY=$RELEASE_BODY
-      script:
-        - test "$PRIOR_VERSION" = "$RELEASE_VERSION" && travis_terminate || echo "Will deploy new version..."
+      script: skip
+      before_deploy:
+        - echo PRIOR_VERSION = $PRIOR_VERSION
+        - echo RELEASE_VERSION = $RELEASE_VERSION
+        - echo RELEASE_BODY = $RELEASE_BODY
       deploy:
         provider: releases
         name: $RELEASE_VERSION
@@ -48,3 +41,24 @@ jobs:
         body: $RELEASE_BODY
         draft: false
         api_key:
+        on:
+          branch: master
+          repo: $DEPLOY_SLUG
+          condition: "$PRIOR_VERSION" != "$RELEASE_VERSION"
+    - stage: deploy
+      language: python
+      env:
+        - JOB="Deploy to release environment"
+      install: skip
+      script: skip
+      before_deploy:
+        - echo TAG = $TRAVIS_TAG
+        - echo BRANCH = $TRAVIS_BRANCH
+        - make tf.tools
+        - make tg.tools
+      deploy:
+        provider: script
+        script: make deploy.release
+        on:
+          tags: true
+          repo: $DEPLOY_SLUG
