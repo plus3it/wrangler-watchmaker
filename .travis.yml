@@ -63,3 +63,4 @@ jobs:
         on:
           tags: true
           repo: $DEPLOY_SLUG
+      skip_cleanup: true
