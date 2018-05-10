@@ -44,7 +44,7 @@ jobs:
         on:
           branch: master
           repo: $DEPLOY_SLUG
-          condition: "$PRIOR_VERSION" != "$RELEASE_VERSION"
+          condition: '"$PRIOR_VERSION" != "$RELEASE_VERSION"'
     - stage: deploy
       language: python
       env:
