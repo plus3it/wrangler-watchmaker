@@ -32,7 +32,7 @@ tg.tools:
 	@echo "[make]: TERRAGRUNT_URL=$(TERRAGRUNT_URL)"
 	curl -sSL -o terragrunt "$(TERRAGRUNT_URL)"
 	chmod +x terragrunt
-	mv terragrunt $HOME/bin
+	mv terragrunt ${HOME}/bin
 	terragrunt --version
 
 .PHONY: deploy.dev
