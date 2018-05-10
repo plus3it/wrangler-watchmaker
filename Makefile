@@ -3,7 +3,7 @@ XARGS_CMD ?= xargs -I {}
 TERRAFORM_VERSION ?= $(shell curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
 TERRAFORM_URL ?= https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip
 TERRAGRUNT_RELEASES ?= $(shell curl -sSL https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest?access_token=4224d33b8569bec8473980bb1bdb982639426a92)
-TERRAGRUNT_URL ?= $(shell echo "$(TERRAGRUNT_RELEASES)" | jq --raw-output  '.assets[] | select(.name=="terragrunt_linux_amd64") | .browser_download_url')
+TERRAGRUNT_URL ?= $(shell echo '$(TERRAGRUNT_RELEASES)' | jq --raw-output  '.assets[] | select(.name=="terragrunt_linux_amd64") | .browser_download_url')
 
 guard-% :
 	@ if [ "${${*}}" = "" ]; then \
