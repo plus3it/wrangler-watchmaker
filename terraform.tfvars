@@ -21,7 +21,7 @@ terragrunt = {
 
     after_hook "tfvars" {
       commands = ["init"]
-      execute  = ["cp", "${get_tfvars_dir()}/*.tfvars", "."]
+      execute  = ["cp", "${get_tfvars_dir()}/wrangler.auto.tfvars", "."]
     }
 
     after_hook "requirements" {

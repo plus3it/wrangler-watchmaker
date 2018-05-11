@@ -8,6 +8,10 @@ terragrunt = {
   }
 
   terraform = {
+    after_hook "tfvars" {
+      execute = ["echo"]
+    }
+
     after_hook "render" {
       commands = ["init"]
       execute  = ["python", "render.py"]

@@ -48,6 +48,7 @@ jobs:
           condition: '"$PRIOR_VERSION" != "$RELEASE_VERSION"'
     - stage: deploy
       language: python
+      python: "3.6"
       env:
         - JOB="Deploy to release environment"
       install: skip
