@@ -24,7 +24,7 @@ tf.tools:
 	@echo "[make]: TERRAFORM_URL=$(TERRAFORM_URL)"
 	curl -sSL -o terraform.zip "$(TERRAFORM_URL)"
 	unzip terraform.zip && rm -f terraform.zip && chmod +x terraform
-	mkdir -p ${HOME}/bin && export PATH=${HOME}/bin:${PATH} && mv terraform ${HOME}/bin/
+	mkdir -p "${HOME}/bin" && export PATH="${HOME}/bin:${PATH}" && mv terraform "${HOME}/bin"
 	terraform --version
 
 .PHONY: tg.tools
@@ -32,7 +32,7 @@ tg.tools:
 	@echo "[make]: TERRAGRUNT_URL=$(TERRAGRUNT_URL)"
 	curl -sSL -o terragrunt "$(TERRAGRUNT_URL)"
 	chmod +x terragrunt
-	mv terragrunt ${HOME}/bin
+	mv terragrunt "${HOME}/bin"
 	terragrunt --version
 
 .PHONY: deploy.dev
@@ -47,8 +47,8 @@ deploy.dev: guard-DEV_BUCKET
 deploy.release: guard-RELEASE_BUCKET guard-RELEASE_OBJECTS_MAP
 	@echo "[make]: Deploying to release environment!"
 	TF_VAR_bucket_name=$(RELEASE_BUCKET) \
-	TF_VAR_s3_objects_map=$(RELEASE_OBJECTS_MAP) \
+	TF_VAR_s3_objects_map='$(RELEASE_OBJECTS_MAP)' \
 		terragrunt plan-all -out tfplan --terragrunt-working-dir release --terragrunt-source-update
 	TF_VAR_bucket_name=$(RELEASE_BUCKET) \
-	TF_VAR_s3_objects_map=$(RELEASE_OBJECTS_MAP) \
+	TF_VAR_s3_objects_map='$(RELEASE_OBJECTS_MAP)' \
 		terragrunt apply-all tfplan --terragrunt-working-dir release
