@@ -1,6 +1,12 @@
 salt_version = "2017.7.5"
 
-salt_repo_prefix = "saltstack/salt/linux/"
+extra_salt_versions = [
+  "2016.11.9",
+]
+
+salt_repo_prefix = "repo/saltstack/salt/linux/"
+
+salt_yum_prefix = "yum.defs/saltstack/salt/"
 
 prefix = "repo/"
 
