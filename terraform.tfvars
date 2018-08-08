@@ -12,7 +12,7 @@ terragrunt = {
   }
 
   terraform {
-    source = "git::https://github.com/plus3it/terraform-aws-wrangler.git?ref=1.0.1"
+    source = "git::https://github.com/plus3it/terraform-aws-wrangler.git?ref=1.1.0"
 
     after_hook "common" {
       commands = ["init"]
@@ -26,17 +26,17 @@ terragrunt = {
 
     after_hook "requirements" {
       commands = ["init"]
-      execute  = ["pip", "install", "-r", "requirements.txt"]
+      execute  = ["pipenv", "install", "-r", "requirements.txt"]
     }
 
     after_hook "render" {
       commands = ["init"]
-      execute  = ["python", "render.py", "-var-file", "wrangler.auto.tfvars"]
+      execute  = ["pipenv", "run", "python", "render.py", "-var-file", "wrangler.auto.tfvars"]
     }
 
     before_hook "render" {
       commands = ["${get_terraform_commands_that_need_vars()}"]
-      execute  = ["python", "render.py", "-var-file", "wrangler.auto.tfvars"]
+      execute  = ["pipenv", "run", "python", "render.py", "-var-file", "wrangler.auto.tfvars"]
     }
   }
 }
