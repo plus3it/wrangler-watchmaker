@@ -38,25 +38,5 @@ terragrunt = {
       commands = ["${get_terraform_commands_that_need_vars()}"]
       execute  = ["python", "render.py", "-var-file", "wrangler.auto.tfvars"]
     }
-
-    extra_arguments "no-color" {
-      commands = [
-        "apply",
-        "destroy",
-        "import",
-        "init",
-        "plan",
-        "push",
-        "refresh",
-        "show",
-        "taint",
-        "validate",
-        "untaint",
-      ]
-
-      arguments = [
-        "-no-color",
-      ]
-    }
   }
 }

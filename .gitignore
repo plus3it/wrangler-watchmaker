@@ -4,6 +4,9 @@ terraform.tfstate.backup
 .terraform/
 terraform.tfstate.d/
 
+# Terragrunt cache
+.terragrunt-cache
+
 # User state
 .filecache/
 *.exe
