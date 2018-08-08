@@ -10,6 +10,19 @@ configurations and managed using terragrunt.
 The `dev` pipeline is currently executed manually, and the `release` pipeline
 executes automatically whenever the project version is bumped.
 
+This project uses `terragrunt` to manage the backend for terraform state,
+and to reduce boilerplate code duplication in terraform root modules.
+
+Terragrunt is a simple wrapper around terraform... On the command line,
+options passed to terragrunt are passed through to terraform. Commands you
+would call as `terraform ...` you can instead just call as `terragrunt ...`.
+
+Terragrunt will create a cache folder in its working directory, copy the root
+module there, execute terragrunt hooks, and use `terraform init` to pull in
+external modules and plugins. In some ways, Terragrunt is a bit like a Python
+virtualenv, in that it isolates the working environment from the rest of the
+system.
+
 ## Dev pipeline
 
 The `dev` pipeline consists of three configurations: bucket, files-repo, and
@@ -59,11 +72,15 @@ repo configurations, and after the change has been reviewed and merged to the
 master branch.
 
 To execute terraform/terragrunt to update the bucket contents, checkout the
-master branch, update it, and use the `deploy.dev` make target:
+master branch, update it from upstream, export the environment variables used
+by terragrunt for the backend state, and use the `deploy.dev` make target:
 
 ```
 git checkout master
 git pull upstream master
+export WRANGLER_BUCKET=<wrangler-state-bucket>
+export WRANGLER_DDB_TABLE=<wrangler-state-ddb>
+export AWS_DEFAULT_REGION=<region>
 make deploy.dev DEV_BUCKET=<dev-bucket>
 ```
 
