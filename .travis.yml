@@ -12,17 +12,17 @@ jobs:
     - stage: test
       env:
         - JOB="Terraform Format Verification"
-      before_script:
-        - make tf.tools
+      install:
+        - make terraform/install
       script:
-        - make tf.lint
+        - make terraform/lint
     - stage: test
       env:
         - JOB="JSON Lint/Format"
       install:
         - jq --version
       script:
-        - make json.lint
+        - make json/lint
     - stage: deploy
       env:
         - JOB="Deploy to GitHub Releases"
@@ -58,11 +58,10 @@ jobs:
       before_deploy:
         - echo TAG = $TRAVIS_TAG
         - echo BRANCH = $TRAVIS_BRANCH
-        - make tf.tools
-        - make tg.tools
+        - make terraform/install terragrunt/install
       deploy:
         provider: script
-        script: make deploy.release
+        script: make deploy/release
         on:
           tags: true
           repo: $DEPLOY_SLUG
