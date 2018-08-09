@@ -51,6 +51,8 @@ jobs:
       python: "3.6"
       env:
         - JOB="Deploy to release environment"
+      before_install:
+        - pip install pipenv
       install: skip
       script: skip
       before_deploy:

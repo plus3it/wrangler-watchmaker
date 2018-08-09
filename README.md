@@ -23,6 +23,40 @@ external modules and plugins. In some ways, Terragrunt is a bit like a Python
 virtualenv, in that it isolates the working environment from the rest of the
 system.
 
+## Dependencies
+
+This project uses modules with external terraform resources that execute
+python scripts. The terragrunt configuration will ensure the python package
+requirements are installed. However, python packages often require root
+privileges to install. To work around that, and improve cross-platform
+compatibility, this project installs python requirements into a virtualenv
+using `pipenv`. This means you must ensure `pipenv` is installed and in your
+PATH.
+
+* *nix:
+
+    ```
+    sudo pip install pipenv
+    ```
+
+* MacOS:
+
+    ```
+    brew install pipenv
+    ```
+
+* Windows:
+
+    ```
+    pip install pipenv
+    ```
+
+* Pip's "user" environment (not always well-supported...):
+
+    ```
+    pip install --user pipenv
+    ```
+
 ## Dev pipeline
 
 The `dev` pipeline consists of three configurations: bucket, files-repo, and
@@ -70,6 +104,8 @@ definition files with versioned URIs.
 This workflow should be executed only _after_ updating the file repo or salt
 repo configurations, and after the change has been reviewed and merged to the
 master branch.
+
+First, ensure you've installed `pipenv`, per the [Dependencies](#dependencies).
 
 To execute terraform/terragrunt to update the bucket contents, checkout the
 master branch, update it from upstream, export the environment variables used

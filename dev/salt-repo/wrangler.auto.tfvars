@@ -12,4 +12,6 @@ salt_yum_prefix = "yum.defs/saltstack/salt/"
 
 prefix = "repo/"
 
+python_cmd = ["pipenv", "run", "python"]
+
 s3_objects_map = {}
