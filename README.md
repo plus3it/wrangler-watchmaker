@@ -109,7 +109,7 @@ First, ensure you've installed `pipenv`, per the [Dependencies](#dependencies).
 
 To execute terraform/terragrunt to update the bucket contents, checkout the
 master branch, update it from upstream, export the environment variables used
-by terragrunt for the backend state, and use the `deploy.dev` make target:
+by terragrunt for the backend state, and use the `deploy/dev` make target:
 
 ```
 git checkout master
@@ -117,7 +117,7 @@ git pull upstream master
 export WRANGLER_BUCKET=<wrangler-state-bucket>
 export WRANGLER_DDB_TABLE=<wrangler-state-ddb>
 export AWS_DEFAULT_REGION=<region>
-make deploy.dev DEV_BUCKET=<dev-bucket>
+make deploy/dev DEV_BUCKET=<dev-bucket>
 ```
 
 ## Release pipeline
