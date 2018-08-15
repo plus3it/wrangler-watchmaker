@@ -15,27 +15,22 @@ terragrunt = {
     source = "git::https://github.com/plus3it/terraform-aws-wrangler.git?ref=1.1.0"
 
     after_hook "common" {
-      commands = ["init"]
+      commands = ["init-from-module"]
       execute  = ["cp", "${get_parent_tfvars_dir()}/common.tf", "."]
     }
 
     after_hook "tfvars" {
-      commands = ["init"]
+      commands = ["init-from-module"]
       execute  = ["cp", "${get_tfvars_dir()}/wrangler.auto.tfvars", "."]
     }
 
     after_hook "requirements" {
-      commands = ["init"]
+      commands = ["init-from-module"]
       execute  = ["pipenv", "install", "-r", "requirements.txt"]
     }
 
     after_hook "render" {
-      commands = ["init"]
-      execute  = ["pipenv", "run", "python", "render.py", "-var-file", "wrangler.auto.tfvars"]
-    }
-
-    before_hook "render" {
-      commands = ["${get_terraform_commands_that_need_vars()}"]
+      commands = ["init-from-module"]
       execute  = ["pipenv", "run", "python", "render.py", "-var-file", "wrangler.auto.tfvars"]
     }
   }

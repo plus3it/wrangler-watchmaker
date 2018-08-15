@@ -13,12 +13,7 @@ terragrunt = {
     }
 
     after_hook "render" {
-      commands = ["init"]
-      execute  = ["pipenv", "run", "python", "render.py"]
-    }
-
-    before_hook "render" {
-      commands = ["${get_terraform_commands_that_need_vars()}"]
+      commands = ["init-from-module"]
       execute  = ["pipenv", "run", "python", "render.py"]
     }
   }
