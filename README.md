@@ -74,13 +74,16 @@ locally, and the `aws` cli to sync that repo to the S3 bucket.
 
 ### Dev workflows
 
-There are three typical `dev` workflows: add/modify the file repo, add/modify
-salt versions, and execute terraform/terragrunt to apply the updated
-configurations.
+There are three typical `dev` workflows:
+
+* add/modify the file repo
+* add/modify salt versions
+* execute terraform/terragrunt to apply the updated configurations
 
 After updating the file repo or salt version, commit the change and open a pull
-request. The change will be reviewed and merged. Once merged, a project
-maintainer will execute the third workflow to update the bucket contents.
+request. The change will be reviewed and merged. Once merged to `master`, the
+CI build system will automatically execute the third workflow to update the bucket
+contents.
 
 #### Updating the dev file repo
 
@@ -99,7 +102,11 @@ definition file hosted at an "unversioned" URI. `extra_salt_versions` is a list
 of additional salt versions to retrieve. These versions will get yum repo
 definition files with versioned URIs.
 
-#### Apply the dev configurations
+#### Manually apply the dev configurations
+
+Applying the dev configurations *should* be handled by the build system
+automatically. However, you *may* find occasion where you need to execute it
+manually.
 
 This workflow should be executed only _after_ updating the file repo or salt
 repo configurations, and after the change has been reviewed and merged to the
@@ -117,7 +124,7 @@ git pull upstream master
 export WRANGLER_BUCKET=<wrangler-state-bucket>
 export WRANGLER_DDB_TABLE=<wrangler-state-ddb>
 export AWS_DEFAULT_REGION=<region>
-make deploy/dev DEV_BUCKET=<dev-bucket>
+make deploy/dev TF_VAR_bucket_name=<dev-bucket> TF_VAR_s3_objects_map='{}'
 ```
 
 ## Release pipeline
@@ -161,10 +168,10 @@ To update the `release` salt version, update `salt_version` and/or
 [release salt-yum-defs configuration](release/salt-yum-defs/wrangler.auto.tfvars).
 
 Some care should be taken when deciding to modify `salt_version` in the
-`release` pipeline... The `watchmaker` default config uses the resulting
+`release` pipeline... `watchmaker` configs may be using the resulting
 "unversioned" URI repo definition. When the `salt_version` is modified,
-`watchmaker` client's will get the updated salt version.
+`watchmaker` clients will get the updated salt version.
 
 `extra_salt_versions` works just as it does in the `dev` pipeline...
-`watchmaker` client's may choose to use the versioned repo definitions in
+`watchmaker` clients may choose to use the versioned repo definitions in
 custom configurations to pin/control the salt version they use.

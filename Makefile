@@ -10,11 +10,8 @@ SHELL := bash
 
 .PHONY: %/install %/lint deploy/%
 
-guard-% :
-	@ if [ "${${*}}" = "" ]; then \
-		echo "Make/environment variable $* not set"; \
-		exit 1; \
-	fi
+guard/env/%:
+	@ _=$(or $($*),$(error Make/environment variable '$*' not present))
 
 terraform/install: TERRAFORM_VERSION ?= $(shell curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
 terraform/install: TERRAFORM_URL ?= https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip
@@ -46,18 +43,10 @@ terraform/lint:
 	terraform fmt -check=true
 	@echo "[make] Terraform files PASSED lint test!"
 
-deploy/dev: guard-DEV_BUCKET
-	@echo "[make]: Deploying to dev environment!"
-	TF_VAR_bucket_name=$(DEV_BUCKET) \
-		terragrunt plan-all -out tfplan --terragrunt-working-dir dev --terragrunt-source-update
-	TF_VAR_bucket_name=$(DEV_BUCKET) \
-		terragrunt apply-all tfplan --terragrunt-working-dir dev
+guard/deploy: | guard/env/TF_VAR_bucket_name
+guard/deploy: | guard/env/TF_VAR_s3_objects_map
 
-deploy/release: guard-RELEASE_BUCKET guard-RELEASE_OBJECTS_MAP
-	@echo "[make]: Deploying to release environment!"
-	TF_VAR_bucket_name=$(RELEASE_BUCKET) \
-	TF_VAR_s3_objects_map='$(RELEASE_OBJECTS_MAP)' \
-		terragrunt plan-all -out tfplan --terragrunt-working-dir release --terragrunt-source-update
-	TF_VAR_bucket_name=$(RELEASE_BUCKET) \
-	TF_VAR_s3_objects_map='$(RELEASE_OBJECTS_MAP)' \
-		terragrunt apply-all tfplan --terragrunt-working-dir release
+deploy/%: | guard/deploy %
+	@echo "[$@]: Deploying '$*' pipeline!"
+		terragrunt plan-all -out tfplan --terragrunt-working-dir $* --terragrunt-source-update
+		terragrunt apply-all tfplan --terragrunt-working-dir $*
