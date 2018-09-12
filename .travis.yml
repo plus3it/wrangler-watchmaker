@@ -7,6 +7,11 @@ env:
     - DEPLOY_SLUG=$OWNER/$REPO
     - TF_INPUT=0
 
+stages:
+  - test
+  - deploy
+  - release
+
 jobs:
   include:
     - stage: test
@@ -23,7 +28,7 @@ jobs:
         - jq --version
       script:
         - make json/lint
-    - stage: deploy
+    - stage: release
       env:
         - JOB="Deploy to GitHub Releases"
         - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
@@ -60,9 +65,15 @@ jobs:
         - echo BRANCH = $TRAVIS_BRANCH
         - make terraform/install terragrunt/install
       deploy:
-        provider: script
-        script: make deploy/release
-        on:
-          tags: true
-          repo: $DEPLOY_SLUG
-        skip_cleanup: true
+        - provider: script
+          script: TF_VAR_bucket_name="${DEV_BUCKET}" TF_VAR_s3_objects_map="${DEV_OBJECTS_MAP}" make deploy/dev
+          on:
+            branch: master
+            repo: $DEPLOY_SLUG
+          skip_cleanup: true
+        - provider: script
+          script: TF_VAR_bucket_name="${RELEASE_BUCKET}" TF_VAR_s3_objects_map="${RELEASE_OBJECTS_MAP}" make deploy/release
+          on:
+            tags: true
+            repo: $DEPLOY_SLUG
+          skip_cleanup: true
