@@ -6,4 +6,6 @@ extra_salt_versions = [
 
 python_cmd = ["pipenv", "run", "python"]
 
+repo_prefix = "repo/saltstack/salt/linux/"
+
 yum_prefix = "yum.defs/saltstack/salt/"
