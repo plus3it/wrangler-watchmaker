@@ -9,14 +9,14 @@
             },
             "Effect": "Deny",
             "Principal": "*",
-            "Resource": "arn:aws:s3:::${bucket_name}/*",
+            "Resource": "arn:${partition}:s3:::${bucket_name}/*",
             "Sid": "DenyInsecureTransport"
         },
         {
             "Action": "s3:GetObject",
             "Effect": "Allow",
             "Principal": "*",
-            "Resource": "arn:aws:s3:::${bucket_name}/*",
+            "Resource": "arn:${partition}:s3:::${bucket_name}/*",
             "Sid": "AllowPublicRead"
         }
     ],
