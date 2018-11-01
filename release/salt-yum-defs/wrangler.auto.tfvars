@@ -1,7 +1,9 @@
 salt_version = "2016.11.9"
 
 extra_salt_versions = [
-  "2017.7.5",
+  "2016.11.9",
+  "2017.7.8",
+  "2018.3.3",
 ]
 
 python_cmd = ["pipenv", "run", "python"]
