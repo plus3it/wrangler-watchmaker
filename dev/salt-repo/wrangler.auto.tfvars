@@ -4,6 +4,7 @@ extra_salt_versions = [
   "2016.11.9",
   "2017.7.8",
   "2018.3.3",
+  "2018.3.4",
 ]
 
 salt_repo_prefix = "repo/saltstack/salt/linux/"
