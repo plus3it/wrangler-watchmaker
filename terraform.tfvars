@@ -12,7 +12,7 @@ terragrunt = {
   }
 
   terraform {
-    source = "git::https://github.com/plus3it/terraform-aws-wrangler.git?ref=1.2.1"
+    source = "git::https://github.com/plus3it/terraform-aws-wrangler.git?ref=1.2.2"
 
     after_hook "common" {
       commands = ["init-from-module"]
