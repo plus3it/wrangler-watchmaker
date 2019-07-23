@@ -13,7 +13,8 @@ SHELL := bash
 guard/env/%:
 	@ _=$(or $($*),$(error Make/environment variable '$*' not present))
 
-terraform/install: TERRAFORM_VERSION ?= $(shell curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
+terraform/install: TERRAFORM_VERSION ?= 0.11.14
+#terraform/install: TERRAFORM_VERSION ?= $(shell curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
 terraform/install: TERRAFORM_URL ?= https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip
 terraform/install:
 	@echo "[make]: TERRAFORM_URL=$(TERRAFORM_URL)"
@@ -23,7 +24,8 @@ terraform/install:
 	terraform --version
 	@echo "[make]: Terraform installed successfully!"
 
-terragrunt/install: TERRAGRUNT_URL ?= $(shell curl -sSL https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest?access_token=4224d33b8569bec8473980bb1bdb982639426a92 | jq --raw-output  '.assets[] | select(.name=="terragrunt_linux_amd64") | .browser_download_url')
+terragrunt/install: TERRAGRUNT_URL ?= https://github.com/gruntwork-io/terragrunt/releases/download/v0.18.7/terragrunt_linux_amd64
+#terragrunt/install: TERRAGRUNT_URL ?= $(shell curl -sSL https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest?access_token=4224d33b8569bec8473980bb1bdb982639426a92 | jq --raw-output  '.assets[] | select(.name=="terragrunt_linux_amd64") | .browser_download_url')
 terragrunt/install:
 	@echo "[make]: TERRAGRUNT_URL=$(TERRAGRUNT_URL)"
 	curl -sSL -o terragrunt "$(TERRAGRUNT_URL)"
