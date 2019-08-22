@@ -8,7 +8,7 @@ terragrunt = {
   }
 
   terraform {
-    source = "git::https://github.com/plus3it/salt-reposync.git//defs?ref=2.1.0"
+    source = "git::https://github.com/plus3it/salt-reposync.git//defs?ref=2.1.1"
 
     after_hook "requirements" {
       execute = ["echo"]
