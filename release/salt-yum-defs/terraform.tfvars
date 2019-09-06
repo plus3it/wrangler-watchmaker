@@ -11,7 +11,8 @@ terragrunt = {
     source = "git::https://github.com/plus3it/salt-reposync.git//defs?ref=2.1.1"
 
     after_hook "requirements" {
-      execute = ["pip", "install", "awscli"]
+      commands = ["init-from-module"]
+      execute  = ["pip", "install", "awscli"]
     }
 
     after_hook "render" {
