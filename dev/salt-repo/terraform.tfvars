@@ -12,7 +12,8 @@ terragrunt = {
 
 
     after_hook "requirements" {
-      execute = ["pip", "install", "awscli"]
+      commands = ["init-from-module"]
+      execute  = ["pip", "install", "awscli"]
     }
 
     after_hook "render" {
