@@ -50,5 +50,5 @@ guard/deploy: | guard/env/TF_VAR_s3_objects_map
 
 deploy/%: | guard/deploy %
 	@echo "[$@]: Deploying '$*' pipeline!"
-		terragrunt plan-all -out tfplan --terragrunt-working-dir $* --terragrunt-source-update
-		terragrunt apply-all tfplan --terragrunt-working-dir $*
+		pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir $* --terragrunt-source-update
+		pipenv run terragrunt apply-all tfplan --terragrunt-working-dir $*

@@ -14,7 +14,7 @@ terragrunt = {
 
     after_hook "render" {
       commands = ["init-from-module"]
-      execute  = ["pipenv", "run", "python", "render.py"]
+      execute  = ["python", "render.py"]
     }
   }
 }

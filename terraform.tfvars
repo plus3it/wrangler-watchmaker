@@ -26,12 +26,12 @@ terragrunt = {
 
     after_hook "requirements" {
       commands = ["init-from-module"]
-      execute  = ["pipenv", "install", "-r", "requirements.txt"]
+      execute  = ["pip", "install", "-r", "requirements.txt"]
     }
 
     after_hook "render" {
       commands = ["init-from-module"]
-      execute  = ["pipenv", "run", "python", "render.py", "-var-file", "wrangler.auto.tfvars"]
+      execute  = ["python", "render.py", "-var-file", "wrangler.auto.tfvars"]
     }
   }
 }

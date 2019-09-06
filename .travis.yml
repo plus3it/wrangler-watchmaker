@@ -61,7 +61,7 @@ jobs:
       before_deploy:
         - echo TAG = $TRAVIS_TAG
         - echo BRANCH = $TRAVIS_BRANCH
-        - pip install pipenv awscli
+        - pip install pipenv
         - make terraform/install terragrunt/install
       deploy:
         - provider: script
