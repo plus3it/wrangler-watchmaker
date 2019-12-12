@@ -8,7 +8,7 @@ terragrunt = {
   }
 
   terraform {
-    source = "git::https://github.com/plus3it/salt-reposync.git//defs?ref=2.1.1"
+    source = "git::https://github.com/plus3it/salt-reposync.git//defs?ref=3.0.0"
 
     after_hook "requirements" {
       commands = ["init-from-module"]
