@@ -65,13 +65,21 @@ jobs:
         - make terraform/install terragrunt/install
       deploy:
         - provider: script
-          script: TF_VAR_bucket_name="${DEV_BUCKET}" TF_VAR_s3_objects_map="${DEV_OBJECTS_MAP}" make deploy/dev
+          script: >-
+            TF_VAR_bucket_name="$DEV_BUCKET"
+            TF_VAR_repo_endpoint="$DEV_REPO"
+            TF_VAR_s3_objects_map="$DEV_OBJECTS_MAP"
+            make deploy/dev
           on:
             branch: master
             repo: $DEPLOY_SLUG
           skip_cleanup: true
         - provider: script
-          script: TF_VAR_bucket_name="${RELEASE_BUCKET}" TF_VAR_s3_objects_map="${RELEASE_OBJECTS_MAP}" make deploy/release
+          script: >-
+            TF_VAR_bucket_name="$RELEASE_BUCKET"
+            TF_VAR_repo_endpoint="$RELEASE_REPO"
+            TF_VAR_s3_objects_map="$RELEASE_OBJECTS_MAP"
+            make deploy/release
           on:
             tags: true
             repo: $DEPLOY_SLUG

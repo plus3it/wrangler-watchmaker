@@ -46,6 +46,7 @@ terraform/lint:
 	@echo "[make] Terraform files PASSED lint test!"
 
 guard/deploy: | guard/env/TF_VAR_bucket_name
+guard/deploy: | guard/env/TF_VAR_repo_endpoint
 guard/deploy: | guard/env/TF_VAR_s3_objects_map
 
 deploy/%: | guard/deploy %
