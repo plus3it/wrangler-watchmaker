@@ -3,9 +3,9 @@ terragrunt = {
     path = "${find_in_parent_folders()}"
   }
 
-  dependencies {
-    paths = ["../bucket"]
-  }
+  # dependencies {
+  #   paths = ["../bucket"]
+  # }
 
   terraform = {
     after_hook "tfvars" {
