@@ -19,7 +19,7 @@ uri_map = {
   # can be retrieved/extracted from:
   #    <https://blogs.technet.microsoft.com/fdcc/2008/05/07/utilities-for-automating-local-group-policy-management/>
   #    <https://msdnshared.blob.core.windows.net/media/TNBlogsFS/prod.evol.blogs.technet.com/telligent.evolution.components.attachments/01/5808/00/00/03/05/16/48/LGPO-Utilities.zip>
-  "s3://wrangler-filecache/microsoft/lgpo/Apply_LGPO_Delta.exe" = "microsoft/lgpo/"
+  "s3://wrangler-watchmaker-filecache/microsoft/lgpo/Apply_LGPO_Delta.exe" = "microsoft/lgpo/"
 }
 
 prefix = "repo/"
