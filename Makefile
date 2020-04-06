@@ -10,6 +10,8 @@ SHELL := bash
 
 .PHONY: %/install %/lint deploy/%
 
+GITHUB_ACCESS_TOKEN ?= 4224d33b8569bec8473980bb1bdb982639426a92
+
 guard/env/%:
 	@ _=$(or $($*),$(error Make/environment variable '$*' not present))
 
@@ -24,11 +26,11 @@ terraform/install:
 	terraform --version
 	@echo "[make]: Terraform installed successfully!"
 
-terragrunt/install: TERRAGRUNT_URL ?= https://github.com/gruntwork-io/terragrunt/releases/download/v0.18.7/terragrunt_linux_amd64
-#terragrunt/install: TERRAGRUNT_URL ?= $(shell curl -sSL https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest?access_token=4224d33b8569bec8473980bb1bdb982639426a92 | jq --raw-output  '.assets[] | select(.name=="terragrunt_linux_amd64") | .browser_download_url')
+terragrunt/install: TERRAGRUNT_VERSION ?= latest
+terragrunt/install: TERRAGRUNT_URL ?= $(shell curl -H "Authorization: token $(GITHUB_ACCESS_TOKEN)" -sSL https://api.github.com/repos/gruntwork-io/terragrunt/releases/$(TERRAGRUNT_VERSION) | jq --raw-output  '.assets[] | select(.name=="terragrunt_linux_amd64") | .browser_download_url')
 terragrunt/install:
 	@echo "[make]: TERRAGRUNT_URL=$(TERRAGRUNT_URL)"
-	curl -sSL -o terragrunt "$(TERRAGRUNT_URL)"
+	curl -sSL -H "Authorization: token $(GITHUB_ACCESS_TOKEN)" -o terragrunt "$(TERRAGRUNT_URL)"
 	chmod +x terragrunt
 	mv terragrunt "$(BIN_DIR)"
 	terragrunt --version

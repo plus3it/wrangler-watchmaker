@@ -13,3 +13,9 @@ terraform.tfstate.d/
 *.msi
 *.rpm
 *.zip
+
+# Files copied by terragrunt
+**/common.tf
+
+# pipenv files
+Pipfile
