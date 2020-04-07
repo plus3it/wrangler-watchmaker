@@ -15,8 +15,7 @@ GITHUB_ACCESS_TOKEN ?= 4224d33b8569bec8473980bb1bdb982639426a92
 guard/env/%:
 	@ _=$(or $($*),$(error Make/environment variable '$*' not present))
 
-terraform/install: TERRAFORM_VERSION ?= 0.11.14
-#terraform/install: TERRAFORM_VERSION ?= $(shell curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
+terraform/install: TERRAFORM_VERSION ?= $(shell curl -sSL https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
 terraform/install: TERRAFORM_URL ?= https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip
 terraform/install:
 	@echo "[make]: TERRAFORM_URL=$(TERRAFORM_URL)"
@@ -49,9 +48,7 @@ terraform/lint:
 
 guard/deploy: | guard/env/TF_VAR_bucket_name
 guard/deploy: | guard/env/TF_VAR_repo_endpoint
-guard/deploy: | guard/env/TF_VAR_s3_objects_map
 
 deploy/%: | guard/deploy %
 	@echo "[$@]: Deploying '$*' pipeline!"
-		pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir $* --terragrunt-source-update
-		pipenv run terragrunt apply-all tfplan --terragrunt-working-dir $*
+	pipenv run terragrunt apply-all --terragrunt-working-dir $* --terragrunt-source-update

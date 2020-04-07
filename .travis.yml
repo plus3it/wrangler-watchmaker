@@ -15,22 +15,20 @@ stages:
 jobs:
   include:
     - stage: test
-      env:
-        - JOB="Terraform Format Verification"
+      name: Terraform Lint
       install:
         - make terraform/install
       script:
         - make terraform/lint
     - stage: test
-      env:
-        - JOB="JSON Lint/Format"
+      name: JSON Lint
       install:
         - jq --version
       script:
         - make json/lint
     - stage: release
+      name: Deploy to GitHub Releases
       env:
-        - JOB="Deploy to GitHub Releases"
         - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
         - RELEASE_VERSION=$(grep '^current_version' $TRAVIS_BUILD_DIR/.bumpversion.cfg | sed 's/^.*= //')
         - RELEASE_BODY="* [$REPO v$RELEASE_VERSION changes](https://github.com/$OWNER/$REPO/compare/$PRIOR_VERSION...$RELEASE_VERSION)"
@@ -52,10 +50,12 @@ jobs:
           repo: $DEPLOY_SLUG
           condition: '"$PRIOR_VERSION" != "$RELEASE_VERSION"'
     - stage: deploy
+      name: Deploy to target environment (dev or release)
       language: python
       python: "3.6"
       env:
-        - JOB="Deploy to release environment"
+        - TF_CLI_ARGS_apply="-auto-approve"
+        - TF_INPUT=0
       install: skip
       script: skip
       before_deploy:
@@ -68,7 +68,6 @@ jobs:
           script: >-
             TF_VAR_bucket_name="$DEV_BUCKET"
             TF_VAR_repo_endpoint="$DEV_REPO"
-            TF_VAR_s3_objects_map="$DEV_OBJECTS_MAP"
             make deploy/dev
           on:
             branch: master
@@ -78,7 +77,6 @@ jobs:
           script: >-
             TF_VAR_bucket_name="$RELEASE_BUCKET"
             TF_VAR_repo_endpoint="$RELEASE_REPO"
-            TF_VAR_s3_objects_map="$RELEASE_OBJECTS_MAP"
             make deploy/release
           on:
             tags: true

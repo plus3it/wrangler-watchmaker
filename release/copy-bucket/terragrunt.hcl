@@ -3,12 +3,26 @@ include {
 }
 
 terraform {
-  after_hook "tfvars" {
-    execute = ["echo"]
-  }
+  source = "git::https://github.com/plus3it/terraform-aws-wrangler.git//?ref=3.0.0"
+}
 
-  after_hook "render" {
-    commands = ["init-from-module"]
-    execute  = ["python", "render.py"]
-  }
+dependency "bucket_list" {
+  config_path = "../bucket-list"
+}
+
+generate "uri_map" {
+  path      = "uri_map.auto.tfvars"
+  if_exists = "overwrite"
+
+  # Construct map of uri => key_path without filename
+  contents = <<-EOF
+    uri_map = {
+      %{ for key in dependency.bucket_list.outputs.s3_objects.keys ~}
+      "s3://${dependency.bucket_list.outputs.s3_objects.bucket}/${key}" = "${trimsuffix(
+        key, # Remove the filename from the key path
+        element(split("/", key), length(split("/", key)) - 1)
+      )}"
+      %{ endfor ~}
+    }
+    EOF
 }

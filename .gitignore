@@ -18,4 +18,4 @@ terraform.tfstate.d/
 **/common.tf
 
 # pipenv files
-Pipfile
+Pipfile.lock
