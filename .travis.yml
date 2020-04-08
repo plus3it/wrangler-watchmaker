@@ -20,6 +20,14 @@ jobs:
         - make init
       script:
         - make docker/run target=lint
+    - stage: test
+      name: Ensure python deps install
+      language: python
+      python: "3.6"
+      install:
+        - pip install pipenv
+        - pipenv install
+      script: skip
     - stage: tag
       if: type != pull_request AND branch = master AND tag is not present
       name: Create GitHub Release
@@ -53,6 +61,7 @@ jobs:
         - TF_CLI_ARGS_apply="-auto-approve"
       install:
         - pip install pipenv
+        - pipenv install
         - make init
         - make rclone/install terraform/install terragrunt/install
       script: skip
