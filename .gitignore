@@ -13,3 +13,10 @@ terraform.tfstate.d/
 *.msi
 *.rpm
 *.zip
+
+# pipenv files
+Pipfile.lock
+
+# ci
+tardigrade-ci
+.tardigrade-ci

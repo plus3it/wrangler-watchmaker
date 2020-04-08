@@ -10,32 +10,24 @@ env:
 stages:
   - test
   - deploy
-  - release
+  - tag
 
 jobs:
   include:
     - stage: test
-      env:
-        - JOB="Terraform Format Verification"
+      name: Lint all the things
       install:
-        - make terraform/install
+        - make init
       script:
-        - make terraform/lint
-    - stage: test
-      env:
-        - JOB="JSON Lint/Format"
-      install:
-        - jq --version
-      script:
-        - make json/lint
-    - stage: release
-      env:
-        - JOB="Deploy to GitHub Releases"
-        - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
-        - RELEASE_VERSION=$(grep '^current_version' $TRAVIS_BUILD_DIR/.bumpversion.cfg | sed 's/^.*= //')
-        - RELEASE_BODY="* [$REPO v$RELEASE_VERSION changes](https://github.com/$OWNER/$REPO/compare/$PRIOR_VERSION...$RELEASE_VERSION)"
+        - make docker/run target=lint
+    - stage: tag
+      if: type != pull_request AND branch = master AND tag is not present
+      name: Create GitHub Release
       script: skip
       before_deploy:
+        - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
+        - RELEASE_VERSION=$(grep '^current_version' $TRAVIS_BUILD_DIR/.bumpversion.cfg | sed 's/^.*= //')
+        - RELEASE_BODY="[$REPO v$RELEASE_VERSION changes](https://github.com/$OWNER/$REPO/compare/$PRIOR_VERSION...$RELEASE_VERSION)"
         - echo PRIOR_VERSION = $PRIOR_VERSION
         - echo RELEASE_VERSION = $RELEASE_VERSION
         - echo RELEASE_BODY = $RELEASE_BODY
@@ -43,6 +35,7 @@ jobs:
         provider: releases
         name: $RELEASE_VERSION
         tag_name: $RELEASE_VERSION
+        target_commitish: $TRAVIS_COMMIT
         body: $RELEASE_BODY
         draft: false
         api_key:
@@ -52,35 +45,36 @@ jobs:
           repo: $DEPLOY_SLUG
           condition: '"$PRIOR_VERSION" != "$RELEASE_VERSION"'
     - stage: deploy
+      if: type != pull_request AND (branch = master OR tag is present)
+      name: Deploy to target environment (master branch=dev; tag=release)
       language: python
       python: "3.6"
       env:
-        - JOB="Deploy to release environment"
-      install: skip
+        - TF_CLI_ARGS_apply="-auto-approve"
+      install:
+        - pip install pipenv
+        - make init
+        - make rclone/install terraform/install terragrunt/install
       script: skip
       before_deploy:
         - echo TAG = $TRAVIS_TAG
         - echo BRANCH = $TRAVIS_BRANCH
-        - pip install pipenv
-        - make terraform/install terragrunt/install
       deploy:
         - provider: script
           script: >-
             TF_VAR_bucket_name="$DEV_BUCKET"
             TF_VAR_repo_endpoint="$DEV_REPO"
-            TF_VAR_s3_objects_map="$DEV_OBJECTS_MAP"
             make deploy/dev
           on:
             branch: master
             repo: $DEPLOY_SLUG
-          skip_cleanup: true
+          cleanup: false
         - provider: script
           script: >-
             TF_VAR_bucket_name="$RELEASE_BUCKET"
             TF_VAR_repo_endpoint="$RELEASE_REPO"
-            TF_VAR_s3_objects_map="$RELEASE_OBJECTS_MAP"
             make deploy/release
           on:
             tags: true
             repo: $DEPLOY_SLUG
-          skip_cleanup: true
+          cleanup: false

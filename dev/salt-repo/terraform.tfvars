@@ -1,27 +1,9 @@
-terragrunt = {
-  include {
-    path = "${find_in_parent_folders()}"
-  }
+salt_versions = [
+  "2018.3.3",
+  "2018.3.4",
+  "3000",
+]
 
-  dependencies {
-    paths = ["../files-repo"]
-  }
+repo_prefix = "repo/saltstack/salt/linux/"
 
-  terraform {
-    source = "git::https://github.com/plus3it/salt-reposync.git?ref=3.0.0"
-
-
-    after_hook "requirements" {
-      commands = ["init-from-module"]
-      execute  = ["pip", "install", "awscli"]
-    }
-
-    after_hook "render" {
-      execute = ["echo"]
-    }
-
-    before_hook "render" {
-      execute = ["echo"]
-    }
-  }
-}
+yum_prefix = "yum.defs/saltstack/salt/"
