@@ -16,3 +16,7 @@ terraform.tfstate.d/
 
 # pipenv files
 Pipfile.lock
+
+# ci
+tardigrade-ci
+.tardigrade-ci
