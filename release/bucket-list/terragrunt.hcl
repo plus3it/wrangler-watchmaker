@@ -4,9 +4,17 @@ include {
 
 terraform {
   source = "./"
+
+  extra_arguments "bucket" {
+    commands = get_terraform_commands_that_need_vars()
+
+    arguments = [
+      "-var",
+      "bucket_name=${get_env("DEV_BUCKET", "")}",
+    ]
+  }
 }
 
 inputs = {
-  bucket_name = get_env("DEV_BUCKET", "")
-  prefix      = "repo/"
+  prefix = "repo/"
 }
