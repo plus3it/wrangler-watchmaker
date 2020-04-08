@@ -10,9 +10,8 @@ remote_state {
   }
 }
 
-terraform {
-  after_hook "common" {
-    commands = ["init-from-module"]
-    execute  = ["cp", "${get_parent_terragrunt_dir()}/common.tf", "."]
-  }
+generate "common.tf" {
+  path      = "common.tf"
+  if_exists = "overwrite"
+  contents  = file("${get_parent_terragrunt_dir()}/common.tf")
 }
