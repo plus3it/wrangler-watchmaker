@@ -21,6 +21,7 @@ jobs:
       script:
         - make docker/run target=lint
     - stage: tag
+      if: type != pull_request AND branch = master AND tag is not present
       name: Create GitHub Release
       script: skip
       before_deploy:
@@ -44,6 +45,7 @@ jobs:
           repo: $DEPLOY_SLUG
           condition: '"$PRIOR_VERSION" != "$RELEASE_VERSION"'
     - stage: deploy
+      if: type != pull_request AND (branch = master OR tag is present)
       name: Deploy to target environment (master branch=dev; tag=release)
       language: python
       python: "3.6"
