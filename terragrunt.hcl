@@ -8,10 +8,9 @@ remote_state {
     dynamodb_table = get_env("WRANGLER_DDB_TABLE", "")
     region         = get_env("AWS_DEFAULT_REGION", "")
   }
-}
 
-generate "common.tf" {
-  path      = "common.tf"
-  if_exists = "overwrite"
-  contents  = file("${get_parent_terragrunt_dir()}/common.tf")
+  generate = {
+    path      = "backend.tf"
+    if_exists = "overwrite_terragrunt"
+  }
 }
