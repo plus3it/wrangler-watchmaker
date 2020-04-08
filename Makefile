@@ -13,6 +13,11 @@ rclone/install: $(BIN_DIR) guard/program/unzip
 	chmod +x $(BIN_DIR)/$(@D)
 	$(@D) --version
 
+## Install terragrunt
+terragrunt/install: TERRAGRUNT_VERSION ?= latest
+terragrunt/install: | $(BIN_DIR) guard/program/jq
+	@ $(MAKE) install/gh-release/$(@D) FILENAME="$(BIN_DIR)/$(@D)" OWNER=gruntwork-io REPO=$(@D) VERSION=$(TERRAGRUNT_VERSION) QUERY='.name | endswith("$(OS)_$(ARCH)")'
+
 guard/deploy: | guard/env/TF_VAR_bucket_name
 guard/deploy: | guard/env/TF_VAR_repo_endpoint
 guard/deploy: | guard/program/pipenv
