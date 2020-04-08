@@ -17,12 +17,9 @@ generate "uri_map" {
   # Construct map of uri => key_path without filename
   contents = <<-EOF
     uri_map = {
-      %{ for key in dependency.bucket_list.outputs.s3_objects.keys ~}
-      "s3://${dependency.bucket_list.outputs.s3_objects.bucket}/${key}" = "${trimsuffix(
-        key, # Remove the filename from the key path
-        element(split("/", key), length(split("/", key)) - 1)
-      )}"
-      %{ endfor ~}
+      %{for key in dependency.bucket_list.outputs.s3_objects.keys~}
+      "s3://${dependency.bucket_list.outputs.s3_objects.bucket}/${key}" = "${trimsuffix(key, element(split("/", key), length(split("/", key)) - 1))}"
+      %{endfor~}
     }
     EOF
 }
