@@ -30,6 +30,14 @@ guard/deploy: | guard/program/rclone
 guard/deploy: | guard/program/terraform
 guard/deploy: | guard/program/terragrunt
 
-deploy/%: | guard/deploy %
+deploy/dev: | guard/deploy
 	@echo "[$@]: Deploying '$*' pipeline!"
-	pipenv run terragrunt apply-all --terragrunt-working-dir $* --terragrunt-source-update
+	pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir $* --terragrunt-source-update
+	pipenv run terragrunt apply-all tfplan --terragrunt-working-dir $*
+
+deploy/release: | guard/deploy
+	@echo "[$@]: Deploying '$*' pipeline!"
+	pipenv run terragrunt plan -out tfplan --terragrunt-working-dir $*/bucket-list --terragrunt-source-update
+	pipenv run terragrunt apply tfplan --terragrunt-working-dir $*/bucket-list
+	pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir $* --terragrunt-source-update --terragrunt-exclude-dir bucket-list
+	pipenv run terragrunt apply-all tfplan --terragrunt-working-dir $* --terragrunt-exclude-dir bucket-list
