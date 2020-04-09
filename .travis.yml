@@ -31,15 +31,16 @@ jobs:
     - stage: tag
       if: type != pull_request AND branch = master AND tag is not present
       name: Create GitHub Release
-      script: skip
-      before_deploy:
+      before_script:
         - PRIOR_VERSION=$(git describe --abbrev=0 --tags)
         - RELEASE_VERSION=$(grep '^current_version' $TRAVIS_BUILD_DIR/.bumpversion.cfg | sed 's/^.*= //')
         - RELEASE_BODY="[$REPO v$RELEASE_VERSION changes](https://github.com/$OWNER/$REPO/compare/$PRIOR_VERSION...$RELEASE_VERSION)"
+        - export PRIOR_VERSION RELEASE_VERSION RELEASE_BODY
+      script: skip
+      before_deploy:
         - echo PRIOR_VERSION = $PRIOR_VERSION
         - echo RELEASE_VERSION = $RELEASE_VERSION
         - echo RELEASE_BODY = $RELEASE_BODY
-        - export PRIOR_VERSION RELEASE_VERSION RELEASE_BODY
       deploy:
         provider: releases
         name: $RELEASE_VERSION
