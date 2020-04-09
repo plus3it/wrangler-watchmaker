@@ -39,6 +39,7 @@ jobs:
         - echo PRIOR_VERSION = $PRIOR_VERSION
         - echo RELEASE_VERSION = $RELEASE_VERSION
         - echo RELEASE_BODY = $RELEASE_BODY
+        - export PRIOR_VERSION RELEASE_VERSION RELEASE_BODY
       deploy:
         provider: releases
         name: $RELEASE_VERSION
