@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "git::https://github.com/plus3it/terraform-aws-wrangler.git//?ref=3.1.0"
+  source = "git::https://github.com/plus3it/terraform-aws-wrangler.git//?ref=3.1.1"
 }
 
 dependency "bucket_list" {
