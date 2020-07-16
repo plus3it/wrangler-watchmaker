@@ -1,4 +1,6 @@
-language: bash
+language: shell
+dist: bionic
+os: linux
 
 env:
   global:
@@ -46,9 +48,9 @@ jobs:
         name: $RELEASE_VERSION
         tag_name: $RELEASE_VERSION
         target_commitish: $TRAVIS_COMMIT
-        body: $RELEASE_BODY
+        release_notes: $RELEASE_BODY
         draft: false
-        api_key:
+        token:
           secure: DSNCRy5c3UMD3r0vLoYW95ReHeqEb31u9g9RNI/HKYQxHwAeExIcewAV46OpXsRpVKnsxRwGiF67Wy6fdB/W9OAMsOkI2HNkSXJRTAuv2VVhK+cdBHWlG2hVl5JdIMjVxUQlTCE+R+8pltQJ+MGvBQrim867yiOGX6JpNU8bAVjLSb/Byem+SCqWmGRVbXyRsVDoxcFwVqPaIjn5zJTmyPYPghp7dfRShLTnYczajUkiBvfa/YNFQ8mzfhgwu6++gu+76YPfvIBRBm/fTsqMZitVMuGD6lLwH+BpIJkmitO+JXrlt3uD9X+XF0RZ2smTE2S8glRsxlF6fWDoigDUb9rcsSyGI5cq0CC354Z06KzLaL+Qqr6V9N13Q9CVJWm11tZKWO2gGj7kshWq+leoiadxAhi4eeYnWFaO4hIbuYK9tAntmC3f3Gn0QILzjmwi0YLaYrr5v+XDM+R8ucX6eOT9GmgLX3zfaWZHC3OUe6FGyrOxdTiJ9t/GqzGqGC7saJun4WYD/DFLk5OjiWdYzHg5+djHRiIT8eZhceRkdmCuUjqWACvGdFo8EHIo64kHFlyGIoS3d85JFrB0m1DEwZUA+rdv8eS+46d7X39/NieB+WcSD2BGTfkDDOYoe6UsiC75plIT3M6aoZuKDgBtsMTfwV93lsP+IAcartzCj7w=
         on:
           branch: master
@@ -72,19 +74,23 @@ jobs:
         - echo BRANCH = $TRAVIS_BRANCH
       deploy:
         - provider: script
-          script: >-
-            TF_VAR_bucket_name="$DEV_BUCKET"
-            TF_VAR_repo_endpoint="$DEV_REPO"
-            make deploy/dev
+          script:
+            - travis_wait 20 sleep 20m &
+            - >-
+              TF_VAR_bucket_name="$DEV_BUCKET"
+              TF_VAR_repo_endpoint="$DEV_REPO"
+              make deploy/dev
           on:
             branch: master
             repo: $DEPLOY_SLUG
           cleanup: false
         - provider: script
-          script: >-
-            TF_VAR_bucket_name="$RELEASE_BUCKET"
-            TF_VAR_repo_endpoint="$RELEASE_REPO"
-            make deploy/release
+          script:
+            - travis_wait 20 sleep 20m &
+            - >-
+              TF_VAR_bucket_name="$RELEASE_BUCKET"
+              TF_VAR_repo_endpoint="$RELEASE_REPO"
+              make deploy/release
           on:
             tags: true
             repo: $DEPLOY_SLUG
