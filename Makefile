@@ -35,7 +35,7 @@ deploy/dev: | guard/deploy
 	pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir dev --terragrunt-source-update
 	pipenv run terragrunt apply-all tfplan --terragrunt-working-dir dev
 
-deploy/release: | guard/deploy
+deploy/release: | guard/deploy guard/env/DEV_BUCKET
 	@echo "[$@]: Deploying 'release' pipeline!"
 	pipenv run terragrunt plan -out tfplan --terragrunt-working-dir release/bucket-list --terragrunt-source-update
 	pipenv run terragrunt apply tfplan --terragrunt-working-dir release/bucket-list
