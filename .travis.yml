@@ -72,19 +72,23 @@ jobs:
         - echo BRANCH = $TRAVIS_BRANCH
       deploy:
         - provider: script
-          script: >-
-            TF_VAR_bucket_name="$DEV_BUCKET"
-            TF_VAR_repo_endpoint="$DEV_REPO"
-            make deploy/dev
+          script:
+            - travis_wait 20 sleep 20m &
+            - >-
+              TF_VAR_bucket_name="$DEV_BUCKET"
+              TF_VAR_repo_endpoint="$DEV_REPO"
+              make deploy/dev
           on:
             branch: master
             repo: $DEPLOY_SLUG
           cleanup: false
         - provider: script
-          script: >-
-            TF_VAR_bucket_name="$RELEASE_BUCKET"
-            TF_VAR_repo_endpoint="$RELEASE_REPO"
-            make deploy/release
+          script:
+            - travis_wait 20 sleep 20m &
+            - >-
+              TF_VAR_bucket_name="$RELEASE_BUCKET"
+              TF_VAR_repo_endpoint="$RELEASE_REPO"
+              make deploy/release
           on:
             tags: true
             repo: $DEPLOY_SLUG
