@@ -88,7 +88,7 @@ jobs:
           script: >-
             TF_VAR_bucket_name="$RELEASE_BUCKET"
             TF_VAR_repo_endpoint="$RELEASE_REPO"
-            travis-wait-improved --timeout 45m
+            travis-wait-improved --timeout 120m
             make deploy/release
           on:
             tags: true
