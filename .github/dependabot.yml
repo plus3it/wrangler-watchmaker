@@ -1,0 +1,32 @@
+version: 2
+updates:
+- package-ecosystem: terraform
+  directory: "/release/salt-yum-defs"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: terraform
+  directory: "/release/copy-bucket"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: terraform
+  directory: "/release/bucket-list"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: terraform
+  directory: "/dev/salt-repo"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: terraform
+  directory: "/dev/files-repo"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
