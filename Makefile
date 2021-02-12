@@ -25,6 +25,7 @@ guard/deploy: | guard/env/TF_VAR_repo_endpoint
 guard/deploy: | guard/env/AWS_DEFAULT_REGION
 guard/deploy: | guard/env/WRANGLER_BUCKET
 guard/deploy: | guard/env/WRANGLER_DDB_TABLE
+guard/deploy: | guard/env/WRANGLER_DISTRIBUTION
 guard/deploy: | guard/program/pipenv
 guard/deploy: | guard/program/rclone
 guard/deploy: | guard/program/terraform
@@ -34,6 +35,7 @@ deploy/dev: | guard/deploy
 	@echo "[$@]: Deploying 'dev' pipeline!"
 	pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir dev --terragrunt-source-update
 	pipenv run terragrunt apply-all tfplan --terragrunt-working-dir dev
+	aws cloudfront create-invalidation --distribution-id $$WRANGLER_DISTRIBUTION --paths "/yum.defs*"
 
 deploy/release: | guard/deploy guard/env/DEV_BUCKET
 	@echo "[$@]: Deploying 'release' pipeline!"
@@ -41,3 +43,4 @@ deploy/release: | guard/deploy guard/env/DEV_BUCKET
 	pipenv run terragrunt apply tfplan --terragrunt-working-dir release/bucket-list
 	pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir release --terragrunt-source-update --terragrunt-exclude-dir bucket-list > /dev/null
 	pipenv run terragrunt apply-all tfplan --terragrunt-working-dir release --terragrunt-exclude-dir bucket-list > /dev/null
+	aws cloudfront create-invalidation --distribution-id $$WRANGLER_DISTRIBUTION --paths "/yum.defs*"

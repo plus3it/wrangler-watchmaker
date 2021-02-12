@@ -27,7 +27,7 @@ jobs:
       language: python
       python: "3.6"
       install:
-        - pip install pipenv
+        - python -m pip install -r requirements.txt
         - pipenv install
       script: skip
     - stage: tag
@@ -64,7 +64,7 @@ jobs:
       env:
         - TF_CLI_ARGS_apply="-auto-approve"
       install:
-        - pip install pipenv
+        - python -m pip install -r requirements.txt
         - pipenv install
         - make init
         - make rclone/install terraform/install terragrunt/install
@@ -72,12 +72,12 @@ jobs:
       before_deploy:
         - echo TAG = $TRAVIS_TAG
         - echo BRANCH = $TRAVIS_BRANCH
-        - pip install travis-wait-improved
       deploy:
         - provider: script
           script: >-
             TF_VAR_bucket_name="$DEV_BUCKET"
             TF_VAR_repo_endpoint="$DEV_REPO"
+            WRANGLER_DISTRIBUTION="$DEV_DISTRIBUTION"
             travis-wait-improved --timeout 45m
             make deploy/dev
           on:
@@ -88,6 +88,7 @@ jobs:
           script: >-
             TF_VAR_bucket_name="$RELEASE_BUCKET"
             TF_VAR_repo_endpoint="$RELEASE_REPO"
+            WRANGLER_DISTRIBUTION="$RELEASE_DISTRIBUTION"
             travis-wait-improved --timeout 120m
             make deploy/release
           on:
