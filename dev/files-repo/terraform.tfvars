@@ -12,7 +12,7 @@ uri_map = {
   "https://archive.repo.saltstack.com/windows/Salt-Minion-2019.2.5-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/"
   "https://archive.repo.saltstack.com/windows/Salt-Minion-2019.2.8-Py2-AMD64-Setup.exe" = "saltstack/salt/windows/"
   "https://archive.repo.saltstack.com/windows/Salt-Minion-2019.2.8-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/"
-  "https://repo.saltstack.com/windows/Salt-Minion-3002-Py3-AMD64-Setup.exe"             = "saltstack/salt/windows/"
+  "https://repo.saltstack.com/windows/Salt-Minion-3003-Py3-AMD64-Setup.exe"             = "saltstack/salt/windows/"
 }
 
 prefix = "repo/"
