@@ -4,7 +4,7 @@ repos = [
     salt_s3_endpoint = "https://s3.repo.saltstack.com/"
     yum_prefix       = "yum.defs/saltstack/salt/"
     salt_versions = [
-      "3002",
+      "3003",
     ]
   },
   {
