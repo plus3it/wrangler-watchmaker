@@ -3,5 +3,5 @@ include {
 }
 
 terraform {
-  source = "git::https://github.com/plus3it/terraform-aws-wrangler.git//?ref=3.1.1"
+  source = "git::https://github.com/plus3it/terraform-aws-wrangler.git//?ref=3.1.2"
 }
