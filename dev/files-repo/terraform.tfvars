@@ -4,8 +4,8 @@ uri_map = {
   "https://www.python.org/ftp/python/3.8.7/python-3.8.7-amd64.exe" = "python/python/"
 
   # get-pip
-  "https://bootstrap.pypa.io/get-pip.py"     = "python/pip/"
-  "https://bootstrap.pypa.io/2.6/get-pip.py" = "python/pip/2.6/"
+  "https://bootstrap.pypa.io/get-pip.py"         = "python/pip/"
+  "https://bootstrap.pypa.io/pip/2.6/get-pip.py" = "python/pip/2.6/"
 
   # salt for windows
   "https://archive.repo.saltstack.com/windows/Salt-Minion-2019.2.5-Py2-AMD64-Setup.exe" = "saltstack/salt/windows/"
