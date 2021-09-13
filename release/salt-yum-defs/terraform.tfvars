@@ -3,6 +3,7 @@ repos = [
     repo_prefix = "repo/saltstack/salt/linux/"
     yum_prefix  = "yum.defs/saltstack/salt/"
     salt_versions = [
+      "3003.3",
       "3003",
     ]
   },
