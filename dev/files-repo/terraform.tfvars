@@ -16,8 +16,8 @@ uri_map = {
   "https://repo.saltstack.com/windows/Salt-Minion-3003.3-Py3-AMD64-Setup.exe"           = "saltstack/salt/windows/"
 
   # spawar scc
-  "s3://wrangler-watchmaker-filecache/spawar/scc/SCC_5.4.1_Windows_Setup.exe" = "spawar/scc/"
-  "s3://wrangler-watchmaker-filecache/spawar/scc/scc-5.4.1.rhel7.x86_64.rpm"  = "spawar/scc/"
+  "s3://wrangler-watchmaker-filecache/spawar/scc/SCC_5.4.2_Windows_Setup.exe" = "spawar/scc/"
+  "s3://wrangler-watchmaker-filecache/spawar/scc/scc-5.4.2.rhel7.x86_64.rpm"  = "spawar/scc/"
 }
 
 prefix = "repo/"
