@@ -1,5 +1,5 @@
-language: shell
-dist: bionic
+language: minimal
+dist: focal
 os: linux
 
 env:
@@ -14,18 +14,26 @@ stages:
   - deploy
   - tag
 
+if: branch = master OR type = pull_request
+
+before_install:
+  - tmpdaemon=$(mktemp)
+  - sudo jq '."registry-mirrors" += ["https://mirror.gcr.io"]' /etc/docker/daemon.json > "$tmpdaemon"
+  - sudo mv "$tmpdaemon" /etc/docker/daemon.json
+  - sudo systemctl daemon-reload
+  - sudo systemctl restart docker
+  - docker system info
+
 jobs:
   include:
     - stage: test
       name: Lint all the things
-      install:
-        - make init
       script:
         - make docker/run target=lint
     - stage: test
       name: Ensure python deps install
       language: python
-      python: "3.6"
+      python: "3.8"
       install:
         - python -m pip install -r requirements.txt
         - pipenv install
@@ -60,7 +68,7 @@ jobs:
       if: type != pull_request AND (branch = master OR tag is present)
       name: Deploy to target environment (master branch=dev; tag=release)
       language: python
-      python: "3.6"
+      python: "3.8"
       env:
         - TF_CLI_ARGS_apply="-auto-approve"
       install:
