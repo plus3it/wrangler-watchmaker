@@ -1,7 +1,9 @@
 uri_map = {
   # python for windows
-  "https://www.python.org/ftp/python/3.6.8/python-3.6.8-amd64.exe" = "python/python/"
-  "https://www.python.org/ftp/python/3.8.7/python-3.8.7-amd64.exe" = "python/python/"
+  "https://www.python.org/ftp/python/3.6.8/python-3.6.8-amd64.exe"   = "python/python/"
+  "https://www.python.org/ftp/python/3.8.7/python-3.8.7-amd64.exe"   = "python/python/"
+  "https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe" = "python/python/"
+  "https://www.python.org/ftp/python/3.9.7/python-3.9.7-amd64.exe"   = "python/python/"
 
   # get-pip
   "https://bootstrap.pypa.io/get-pip.py"         = "python/pip/"
