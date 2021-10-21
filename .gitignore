@@ -3,6 +3,7 @@ terraform.tfstate
 terraform.tfstate.backup
 .terraform/
 terraform.tfstate.d/
+.terraform.lock.hcl
 
 # Terragrunt cache
 .terragrunt-cache
