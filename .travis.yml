@@ -14,7 +14,7 @@ stages:
   - deploy
   - tag
 
-if: branch = master OR type = pull_request
+if: branch = master OR type = pull_request OR tag is present
 
 before_install:
   - tmpdaemon=$(mktemp)
