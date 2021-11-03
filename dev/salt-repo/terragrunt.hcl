@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "git::https://github.com/plus3it/salt-reposync.git//?ref=5.0.2"
+  source = "git::https://github.com/plus3it/salt-reposync.git//?ref=5.0.3"
 }
 
 dependencies {
