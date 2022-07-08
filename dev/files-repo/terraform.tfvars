@@ -10,13 +10,9 @@ uri_map = {
   "https://bootstrap.pypa.io/pip/2.6/get-pip.py" = "python/pip/2.6/"
 
   # salt for windows
-  "https://archive.repo.saltstack.com/windows/Salt-Minion-2019.2.5-Py2-AMD64-Setup.exe" = "saltstack/salt/windows/"
-  "https://archive.repo.saltstack.com/windows/Salt-Minion-2019.2.5-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/"
-  "https://archive.repo.saltstack.com/windows/Salt-Minion-2019.2.8-Py2-AMD64-Setup.exe" = "saltstack/salt/windows/"
-  "https://archive.repo.saltstack.com/windows/Salt-Minion-2019.2.8-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/"
-  "https://repo.saltproject.io/windows/Salt-Minion-3004-2-Py3-AMD64-Setup.exe"          = "saltstack/salt/windows/"
-  "https://repo.saltproject.io/windows/Salt-Minion-3003.3-Py3-AMD64-Setup.exe"          = "saltstack/salt/windows/"
-  "https://repo.saltproject.io/windows/Salt-Minion-3003-Py3-AMD64-Setup.exe"            = "saltstack/salt/windows/"
+  "https://archive.repo.saltproject.io/windows/Salt-Minion-3004-2-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/"
+  "https://archive.repo.saltproject.io/windows/Salt-Minion-3003.3-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/"
+  "https://repo.saltproject.io/windows/Salt-Minion-3004.2-1-Py3-AMD64-Setup.exe"       = "saltstack/salt/windows/"
 
 
   # spawar scc
