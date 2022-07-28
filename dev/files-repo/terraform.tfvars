@@ -16,8 +16,10 @@ uri_map = {
 
 
   # spawar scc
-  "s3://wrangler-watchmaker-filecache/spawar/scc/SCC_5.4.2_Windows_Setup.exe" = "spawar/scc/"
-  "s3://wrangler-watchmaker-filecache/spawar/scc/scc-5.4.2.rhel7.x86_64.rpm"  = "spawar/scc/"
+  "s3://wrangler-watchmaker-filecache/spawar/scc/SCC_5.5_Windows_Setup.exe" = "spawar/scc/"
+  "s3://wrangler-watchmaker-filecache/spawar/scc/scc-5.5.rhel7.x86_64.rpm"  = "spawar/scc/"
+  "s3://wrangler-watchmaker-filecache/spawar/scc/scc-5.5.rhel8.x86_64.rpm"  = "spawar/scc/"
+  "s3://wrangler-watchmaker-filecache/spawar/scc/RPM-GPG-KEY-scc-5.5"       = "spawar/scc/"
 }
 
 prefix = "repo/"
