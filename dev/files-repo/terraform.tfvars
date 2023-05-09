@@ -16,7 +16,6 @@ uri_map = {
   "https://repo.saltproject.io/windows/Salt-Minion-3005.1-Py3-AMD64-Setup.exe"            = "saltstack/salt/windows/" # classic
   "https://repo.saltproject.io/salt/py3/windows/3005.1-2/salt-3005.1-2-windows-amd64.exe" = "saltstack/salt/windows/" # onedir
 
-
   # spawar scc
   "s3://wrangler-watchmaker-filecache/spawar/scc/SCC_5.5_Windows_Setup.exe"   = "spawar/scc/"
   "s3://wrangler-watchmaker-filecache/spawar/scc/scc-5.5.rhel7.x86_64.rpm"    = "spawar/scc/"
