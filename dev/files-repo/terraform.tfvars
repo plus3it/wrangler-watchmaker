@@ -17,6 +17,7 @@ uri_map = {
   "https://repo.saltproject.io/salt/py3/windows/3005.1-2/salt-3005.1-2-windows-amd64.exe"            = "saltstack/salt/windows/" # onedir
   "https://repo.saltproject.io/salt/py3/windows/minor/3006.1/Salt-Minion-3006.1-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/" # onedir
   "https://repo.saltproject.io/salt/py3/windows/minor/3006.2/Salt-Minion-3006.2-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/" # onedir
+  "https://repo.saltproject.io/salt/py3/windows/minor/3006.4/Salt-Minion-3006.4-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/" # onedir
 
 
   # spawar scc
