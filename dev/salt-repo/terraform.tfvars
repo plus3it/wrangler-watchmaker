@@ -5,12 +5,11 @@ repos = [
     salt_s3_endpoint = "https://s3.repo.saltproject.io/"
     yum_prefix       = "yum.defs/saltstack/salt/"
     salt_versions = [
+      "3007.1",
+      "3006.9",
       "3006.4",
       "3006.2",
       "3006.1",
-      "3005.1-4",
-      "3005.1",
-      "3004.2",
     ]
   },
   {
@@ -19,8 +18,7 @@ repos = [
     salt_s3_endpoint = "https://s3.archive.repo.saltproject.io/"
     yum_prefix       = "yum.defs/saltstack/salt/"
     salt_versions = [
-      "3004",
-      "3003.3",
+      "3004.2",
     ]
   },
 ]

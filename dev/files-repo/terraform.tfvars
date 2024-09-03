@@ -11,14 +11,12 @@ uri_map = {
 
   # salt for windows
   "https://archive.repo.saltproject.io/windows/Salt-Minion-3004-2-Py3-AMD64-Setup.exe"               = "saltstack/salt/windows/"
-  "https://archive.repo.saltproject.io/windows/Salt-Minion-3003.3-Py3-AMD64-Setup.exe"               = "saltstack/salt/windows/"
   "https://repo.saltproject.io/windows/Salt-Minion-3004.2-1-Py3-AMD64-Setup.exe"                     = "saltstack/salt/windows/"
-  "https://repo.saltproject.io/windows/Salt-Minion-3005.1-Py3-AMD64-Setup.exe"                       = "saltstack/salt/windows/" # classic
-  "https://repo.saltproject.io/salt/py3/windows/3005.1-2/salt-3005.1-2-windows-amd64.exe"            = "saltstack/salt/windows/" # onedir
   "https://repo.saltproject.io/salt/py3/windows/minor/3006.1/Salt-Minion-3006.1-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/" # onedir
   "https://repo.saltproject.io/salt/py3/windows/minor/3006.2/Salt-Minion-3006.2-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/" # onedir
   "https://repo.saltproject.io/salt/py3/windows/minor/3006.4/Salt-Minion-3006.4-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/" # onedir
-
+  "https://repo.saltproject.io/salt/py3/windows/minor/3006.9/Salt-Minion-3006.9-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/" # onedir
+  "https://repo.saltproject.io/salt/py3/windows/minor/3007.1/Salt-Minion-3007.1-Py3-AMD64-Setup.exe" = "saltstack/salt/windows/" # onedir
 
   # spawar scc
   "s3://wrangler-watchmaker-filecache/spawar/scc/SCC_5.5_Windows_Setup.exe"   = "spawar/scc/"
