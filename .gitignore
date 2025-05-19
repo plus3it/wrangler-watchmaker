@@ -21,3 +21,6 @@ Pipfile.lock
 # ci
 tardigrade-ci
 .tardigrade-ci
+
+#macOS local dir meta file
+.DS_Store
