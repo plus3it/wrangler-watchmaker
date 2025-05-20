@@ -15,24 +15,28 @@ rclone/install: $(BIN_DIR) guard/program/unzip
 	chmod +x $(BIN_DIR)/$(@D)
 	$(@D) --version
 
-guard/deploy: | guard/env/TF_VAR_bucket_name
-guard/deploy: | guard/env/TF_VAR_repo_endpoint
-guard/deploy: | guard/env/AWS_DEFAULT_REGION
-guard/deploy: | guard/env/WRANGLER_BUCKET
-guard/deploy: | guard/env/WRANGLER_DDB_TABLE
-guard/deploy: | guard/env/WRANGLER_DISTRIBUTION
-guard/deploy: | guard/program/pipenv
-guard/deploy: | guard/program/rclone
-guard/deploy: | guard/program/terraform
-guard/deploy: | guard/program/terragrunt
+guard/deps: | guard/env/TF_VAR_bucket_name
+guard/deps: | guard/env/TF_VAR_repo_endpoint
+guard/deps: | guard/env/AWS_DEFAULT_REGION
+guard/deps: | guard/env/WRANGLER_BUCKET
+guard/deps: | guard/env/WRANGLER_DDB_TABLE
+guard/deps: | guard/env/WRANGLER_DISTRIBUTION
+guard/deps: | guard/program/pipenv
+guard/deps: | guard/program/rclone
+guard/deps: | guard/program/terraform
+guard/deps: | guard/program/terragrunt
 
-deploy/dev: | guard/deploy
+plan/dev: | guard/deps
+	@echo "[$@]: Planning 'dev' pipeline!"
+	pipenv run terragrunt run-all plan -lock=false --working-dir dev --source-update
+
+deploy/dev: | guard/deps
 	@echo "[$@]: Deploying 'dev' pipeline!"
 	pipenv run terragrunt run-all plan -lock=false -out tfplan --working-dir dev --source-update
 	pipenv run terragrunt run-all apply tfplan --working-dir dev
 	aws cloudfront create-invalidation --distribution-id $$WRANGLER_DISTRIBUTION --paths "/yum.defs*"
 
-deploy/release: | guard/deploy guard/env/DEV_BUCKET
+deploy/release: | guard/deps guard/env/DEV_BUCKET
 	@echo "[$@]: Deploying 'release' pipeline!"
 	pipenv run terragrunt plan -lock=false -out tfplan --working-dir release/bucket-list --source-update
 	pipenv run terragrunt apply tfplan --working-dir release/bucket-list

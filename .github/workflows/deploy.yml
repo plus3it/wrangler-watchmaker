@@ -61,6 +61,10 @@ jobs:
       - name: Validate credential
         run: aws sts get-caller-identity
 
+      - name: Generate plan in pull request
+        if: github.event_name == 'pull_request'
+        run: make plan/dev
+
       - name: Deploy to target environment
         if: github.event_name != 'pull_request'
         run: make deploy/${{ env.TARGET_ENVIRONMENT}}
