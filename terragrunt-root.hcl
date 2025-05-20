@@ -2,11 +2,11 @@ remote_state {
   backend = "s3"
 
   config = {
-    bucket         = get_env("WRANGLER_BUCKET", "")
+    bucket         = get_env("WRANGLER_BUCKET")
     key            = "tfstate/${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
-    dynamodb_table = get_env("WRANGLER_DDB_TABLE", "")
-    region         = get_env("AWS_DEFAULT_REGION", "")
+    dynamodb_table = get_env("WRANGLER_DDB_TABLE")
+    region         = get_env("AWS_DEFAULT_REGION")
   }
 
   generate = {

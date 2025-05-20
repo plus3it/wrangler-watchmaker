@@ -67,6 +67,8 @@ jobs:
 
       - name: Deploy to target environment
         if: github.event_name != 'pull_request'
+        env:
+          DEV_BUCKET: ${{ vars.DEV_BUCKET }}
         run: make deploy/${{ env.TARGET_ENVIRONMENT}}
 
   # Run the deploy job first, then create release on push to master or on-demand workflow dispatch
