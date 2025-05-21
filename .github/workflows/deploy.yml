@@ -28,8 +28,8 @@ jobs:
       TARGET_ENVIRONMENT: "${{ github.event_name != 'release' && 'dev' || 'release' }}"
       TF_VAR_bucket_name: "${{ github.event_name != 'release' && vars.DEV_BUCKET || vars.RELEASE_BUCKET }}"
       TF_VAR_repo_endpoint: "${{ github.event_name != 'release' && vars.DEV_REPO || vars.RELEASE_REPO }}"
-      WRANGLER_BUCKET: ${{ vars.WRANGLER_BUCKET }}
-      WRANGLER_DDB_TABLE: ${{ vars.WRANGLER_DDB_TABLE }}
+      WRANGLER_BUCKET: "${{ vars.WRANGLER_BUCKET }}"
+      WRANGLER_DDB_TABLE: "${{ vars.WRANGLER_DDB_TABLE }}"
       WRANGLER_DISTRIBUTION: "${{ github.event_name != 'release' && vars.DEV_DISTRIBUTION || vars.RELEASE_DISTRIBUTION }}"
     permissions:
       id-token: write
@@ -56,7 +56,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df
         with:
           role-to-assume: "${{ github.event_name != 'pull_request' && secrets.AWS_ROLE_ARN || vars.AWS_ROLE_ARN }}"
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+          aws-region: "${{ env.AWS_DEFAULT_REGION }}"
 
       - name: Validate credential
         run: aws sts get-caller-identity
@@ -68,13 +68,15 @@ jobs:
       - name: Deploy to target environment
         if: github.event_name != 'pull_request'
         env:
-          DEV_BUCKET: ${{ vars.DEV_BUCKET }}
+          DEV_BUCKET: "${{ vars.DEV_BUCKET }}"
+          TF_INPUT: "0"
+          TF_CLI_ARGS_apply: "-auto-approve"
         run: make deploy/${{ env.TARGET_ENVIRONMENT}}
 
       - name: Generate plan for release
         if: github.event_name != 'release' && github.event_name != 'pull_request'
         env:
-          DEV_BUCKET: ${{ vars.DEV_BUCKET }}
+          DEV_BUCKET: "${{ vars.DEV_BUCKET }}"
           TF_VAR_bucket_name: "${{ vars.RELEASE_BUCKET }}"
           TF_VAR_repo_endpoint: "${{ vars.RELEASE_REPO }}"
         run: make plan/release
@@ -86,6 +88,6 @@ jobs:
     if: github.event_name != 'release' && github.event_name != 'pull_request'
     uses: plus3it/actions-workflows/.github/workflows/release.yml@78caa4f6a2b5426af0ade68fb706176ee58fda84
     secrets:
-      release-token: ${{ secrets.GH_RELEASES_TOKEN }}
+      release-token: "${{ secrets.GH_RELEASES_TOKEN }}"
     with:
       mockstacktest-enable: false
