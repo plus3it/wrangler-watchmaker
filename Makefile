@@ -21,7 +21,7 @@ plan/dev: | guard/deps
 
 plan/release: | guard/deps guard/env/DEV_BUCKET
 	@echo "[$@]: Planning 'release' pipeline!"
-	pipenv run terragrunt run --working-dir release/bucket-list --source-update -- plan -lock=false
+	pipenv run terragrunt run --working-dir release/bucket-list --source-update -- plan -lock=false -out tfplan
 	pipenv run terragrunt run --working-dir release/bucket-list -- apply tfplan
 	pipenv run terragrunt run --all --working-dir release --queue-exclude-dir bucket-list --source-update -- plan -lock=false
 
