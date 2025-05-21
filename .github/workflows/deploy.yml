@@ -71,6 +71,14 @@ jobs:
           DEV_BUCKET: ${{ vars.DEV_BUCKET }}
         run: make deploy/${{ env.TARGET_ENVIRONMENT}}
 
+      - name: Generate plan for release
+        if: github.event_name != 'release' && github.event_name != 'pull_request'
+        env:
+          DEV_BUCKET: ${{ vars.DEV_BUCKET }}
+          TF_VAR_bucket_name: "${{ vars.RELEASE_BUCKET }}"
+          TF_VAR_repo_endpoint: "${{ vars.RELEASE_REPO }}"
+        run: make plan/release
+
   # Run the deploy job first, then create release on push to master or on-demand workflow dispatch
   release:
     needs:
