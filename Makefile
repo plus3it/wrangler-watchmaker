@@ -4,38 +4,37 @@ SHELL := /bin/bash
 
 export AWS_DEFAULT_REGION
 
-## Install rclone
-rclone/install: RCLONE_VERSION ?= latest
-rclone/install: $(BIN_DIR) guard/program/unzip
-	@ echo "[$@]: Installing $(@D)..."
-	$(call download_github_release,$(@D).zip,$(@D),$(@D),$(RCLONE_VERSION),.name | endswith("$(OS)-$(ARCH).zip"))
-	unzip $(@D).zip
-	mv $(@D)-*/$(@D) $(BIN_DIR)
-	rm -rf $(@D)*
-	chmod +x $(BIN_DIR)/$(@D)
-	$(@D) --version
+guard/deps: | guard/env/TF_VAR_bucket_name
+guard/deps: | guard/env/TF_VAR_repo_endpoint
+guard/deps: | guard/env/AWS_DEFAULT_REGION
+guard/deps: | guard/env/WRANGLER_BUCKET
+guard/deps: | guard/env/WRANGLER_DDB_TABLE
+guard/deps: | guard/env/WRANGLER_DISTRIBUTION
+guard/deps: | guard/program/pipenv
+guard/deps: | guard/program/rclone
+guard/deps: | guard/program/terraform
+guard/deps: | guard/program/terragrunt
 
-guard/deploy: | guard/env/TF_VAR_bucket_name
-guard/deploy: | guard/env/TF_VAR_repo_endpoint
-guard/deploy: | guard/env/AWS_DEFAULT_REGION
-guard/deploy: | guard/env/WRANGLER_BUCKET
-guard/deploy: | guard/env/WRANGLER_DDB_TABLE
-guard/deploy: | guard/env/WRANGLER_DISTRIBUTION
-guard/deploy: | guard/program/pipenv
-guard/deploy: | guard/program/rclone
-guard/deploy: | guard/program/terraform
-guard/deploy: | guard/program/terragrunt
+plan/dev: | guard/deps
+	@echo "[$@]: Planning 'dev' pipeline!"
+	pipenv run terragrunt run --all --working-dir dev --source-update -- plan -lock=false
 
-deploy/dev: | guard/deploy
+plan/release: | guard/deps guard/env/DEV_BUCKET
+	@echo "[$@]: Planning 'release' pipeline!"
+	pipenv run terragrunt run --working-dir release/bucket-list --source-update -- plan -lock=false
+	pipenv run terragrunt run --working-dir release/bucket-list -- apply tfplan
+	pipenv run terragrunt run --all --working-dir release --queue-exclude-dir bucket-list --source-update -- plan -lock=false
+
+deploy/dev: | guard/deps
 	@echo "[$@]: Deploying 'dev' pipeline!"
-	pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir dev --terragrunt-source-update
-	pipenv run terragrunt apply-all tfplan --terragrunt-working-dir dev
+	pipenv run terragrunt run --all --working-dir dev --source-update -- plan -lock=false -out tfplan
+	pipenv run terragrunt run --all --working-dir dev -- apply tfplan
 	aws cloudfront create-invalidation --distribution-id $$WRANGLER_DISTRIBUTION --paths "/yum.defs*"
 
-deploy/release: | guard/deploy guard/env/DEV_BUCKET
+deploy/release: | guard/deps guard/env/DEV_BUCKET
 	@echo "[$@]: Deploying 'release' pipeline!"
-	pipenv run terragrunt plan -out tfplan --terragrunt-working-dir release/bucket-list --terragrunt-source-update
-	pipenv run terragrunt apply tfplan --terragrunt-working-dir release/bucket-list
-	pipenv run terragrunt plan-all -out tfplan --terragrunt-working-dir release --terragrunt-source-update --terragrunt-exclude-dir bucket-list > /dev/null
-	pipenv run terragrunt apply-all tfplan --terragrunt-working-dir release --terragrunt-exclude-dir bucket-list > /dev/null
+	pipenv run terragrunt run --working-dir release/bucket-list --source-update -- plan -lock=false -out tfplan
+	pipenv run terragrunt run --working-dir release/bucket-list -- apply tfplan
+	pipenv run terragrunt run --all --working-dir release --queue-exclude-dir bucket-list --source-update -- plan -lock=false -out tfplan
+	pipenv run terragrunt run --all --working-dir release --queue-exclude-dir bucket-list -- apply tfplan
 	aws cloudfront create-invalidation --distribution-id $$WRANGLER_DISTRIBUTION --paths "/yum.defs*"

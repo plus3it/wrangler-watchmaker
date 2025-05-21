@@ -1,12 +1,39 @@
 version: 2
 updates:
-  - package-ecosystem: terraform
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
   - package-ecosystem: docker
-    directory: "/"
+    directory: /
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
+    groups:
+      docker:
+        patterns:
+          - "*"
+
+  - package-ecosystem: terraform
+    directory: "/dev/files-repo"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: terraform
+    directory: "/dev/salt-repo"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: terraform
+    directory: "/release/copy-bucket"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: terraform
+    directory: "/release/salt-yum-defs"
+    schedule:
+      interval: weekly

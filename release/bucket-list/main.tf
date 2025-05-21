@@ -15,12 +15,12 @@ variable "max_keys" {
   default     = 99999
 }
 
-data "aws_s3_bucket_objects" "this" {
+data "aws_s3_objects" "this" {
   bucket   = var.bucket_name
   prefix   = var.prefix
   max_keys = var.max_keys
 }
 
 output "s3_objects" {
-  value = data.aws_s3_bucket_objects.this
+  value = data.aws_s3_objects.this
 }

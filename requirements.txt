@@ -1,3 +1,1 @@
-awscli
 pipenv
-travis-wait-improved
