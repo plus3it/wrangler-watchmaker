@@ -2,7 +2,7 @@ repos = [
   {
     repo_type = "webdav"
 
-    repo_prefix = "repo/saltstack/salt/linux/"
+    repo_prefix = "repo/saltstack/salt/linux/rpm/"
     yum_prefix  = "yum.defs/saltstack/salt/"
 
     salt_gpgkey_url = "https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public"
