@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "git::https://github.com/plus3it/salt-reposync.git//modules/defs?ref=6.2.0"
+  source = "git::https://github.com/plus3it/salt-reposync.git//modules/defs?ref=6.2.1"
 }
 
 dependency "copy_bucket" {
