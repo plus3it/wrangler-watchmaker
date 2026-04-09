@@ -8,6 +8,7 @@ repos = [
     salt_gpgkey_url = "https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public"
     salt_webdav_url = "https://packages.broadcom.com/artifactory/"
     salt_versions = [
+      "3007.13",
       "3007.8",
       "3007.2",
     ]
