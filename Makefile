@@ -22,19 +22,19 @@ plan/dev: | guard/deps
 plan/release: | guard/deps guard/env/DEV_BUCKET
 	@echo "[$@]: Planning 'release' pipeline!"
 	pipenv run terragrunt run --working-dir release/bucket-list --source-update -- plan -lock=false -out tfplan
-	pipenv run terragrunt run --working-dir release/bucket-list -- apply tfplan
+	pipenv run terragrunt run --working-dir release/bucket-list -- apply -auto-approve -input=false tfplan
 	pipenv run terragrunt run --all --working-dir release --queue-exclude-dir bucket-list --source-update -- plan -lock=false
 
 deploy/dev: | guard/deps
 	@echo "[$@]: Deploying 'dev' pipeline!"
 	pipenv run terragrunt run --all --working-dir dev --source-update -- plan -lock=false -out tfplan
-	pipenv run terragrunt run --all --working-dir dev -- apply tfplan
+	pipenv run terragrunt run --all --working-dir dev -- apply -auto-approve -input=false tfplan
 	aws cloudfront create-invalidation --distribution-id $$WRANGLER_DISTRIBUTION --paths "/yum.defs*"
 
 deploy/release: | guard/deps guard/env/DEV_BUCKET
 	@echo "[$@]: Deploying 'release' pipeline!"
 	pipenv run terragrunt run --working-dir release/bucket-list --source-update -- plan -lock=false -out tfplan
-	pipenv run terragrunt run --working-dir release/bucket-list -- apply tfplan
+	pipenv run terragrunt run --working-dir release/bucket-list -- apply -auto-approve -input=false tfplan
 	pipenv run terragrunt run --all --working-dir release --queue-exclude-dir bucket-list --source-update -- plan -lock=false -out tfplan
-	pipenv run terragrunt run --all --working-dir release --queue-exclude-dir bucket-list -- apply tfplan
+	pipenv run terragrunt run --all --working-dir release --queue-exclude-dir bucket-list -- apply -auto-approve -input=false tfplan
 	aws cloudfront create-invalidation --distribution-id $$WRANGLER_DISTRIBUTION --paths "/yum.defs*"
