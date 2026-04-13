@@ -53,7 +53,7 @@ jobs:
         uses: unfor19/install-aws-cli-action@f5b46b7f32cf5e7ebd652656c5036bf83dd1e60c
 
       - name: Configure aws credentials
-        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7
+        uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37
         with:
           role-to-assume: "${{ github.event_name != 'pull_request' && secrets.AWS_ROLE_ARN || vars.AWS_ROLE_ARN }}"
           aws-region: "${{ env.AWS_DEFAULT_REGION }}"
@@ -86,7 +86,7 @@ jobs:
     needs:
       - deploy
     if: github.event_name != 'release' && github.event_name != 'pull_request'
-    uses: plus3it/actions-workflows/.github/workflows/release.yml@269d875599c92395f7fa99cab43edc1820798e61
+    uses: plus3it/actions-workflows/.github/workflows/release.yml@ce3cef72cf4ac9605a29350d1d4387dfb86cd7a8
     secrets:
       release-token: "${{ secrets.GH_RELEASES_TOKEN }}"
     with:
