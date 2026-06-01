@@ -53,7 +53,7 @@ jobs:
         uses: unfor19/install-aws-cli-action@f5b46b7f32cf5e7ebd652656c5036bf83dd1e60c
 
       - name: Configure aws credentials
-        uses: aws-actions/configure-aws-credentials@d979d5b3a71173a29b74b5b88418bfda9437d885
+        uses: aws-actions/configure-aws-credentials@99214aa6889fcddfa57764031d71add364327e59
         with:
           role-to-assume: "${{ github.event_name != 'pull_request' && secrets.AWS_ROLE_ARN || vars.AWS_ROLE_ARN }}"
           aws-region: "${{ env.AWS_DEFAULT_REGION }}"
